@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Defense Gallery with Solar System Background</title>
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        background: #000;
+        color: white;
+        font-family: Arial, sans-serif;
+        overflow-x: hidden;
+    }
+
+    /* Solar System Background */
+    .solar-bg {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        overflow: hidden;
+        z-index: 0;
+    }
+
+    .page-loader__planet-container {
+        filter: url('#goo');
+        position: absolute;
+        top: 50%; left: 50%;
+        transform: translate(-50%, -50%);
+        width: 600px;
+        height: 600px;
+    }
+
+    .solar-system {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .sun {
+        width: 55px;
+        height: 55px;
+        border-radius: 50%;
+        background: radial-gradient(circle at 30% 30%, #FFF8DC 0%, #FFEE00 15%, #FFD700 40%, #FFA500 70%, #FF6347 100%);
+        box-shadow: 0 0 8px 1px rgba(255, 215, 0, 0.8), 0 0 14px 3px rgba(255, 165, 0, 0.5), 0 0 20px 4px rgba(255, 99, 71, 0.2), inset -8px -8px 20px rgba(255, 140, 0, 0.8), inset 3px 3px 10px rgba(255, 255, 255, 0.7);
+        position: absolute;
+        z-index: 10;
+        animation: sunPulse 4s ease-in-out infinite;
+    }
+    @keyframes sunPulse { 0%, 100% { transform: scale(1);} 50% { transform: scale(1.08);} }
+
+    .orbit-path {
+        position: absolute;
+        top: 50%; left: 50%;
+        border-radius: 50%;
+        opacity: 0;
+        width: 0; height: 0;
+        transform: translate(-50%, -50%);
+    }
+
+    .planet {
+        position: absolute;
+        border-radius: 50%;
+        top: 50%;
+        left: 100%;
+        transform: translate(-50%, -50%);
+    }
+    .planet1 { background: gray; }
+    .planet2 { background: orange; }
+    .planet3 { background: blue; }
+    .planet4 { background: red; }
+    .planet5 { background: tan; }
+    .planet6 { background: burlywood; }
+    .planet7 { background: turquoise; }
+    .planet8 { background: navy; }
+    .planet9 { background: violet; }
+
+    /* Gallery Styling */
+    .gallery {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        justify-content: center;
+        gap: 50px;
+        padding: 50px;
+    }
+
+    .gallery-item {
+        background: rgba(0,0,0,0.6);
+        padding: 20px;
+        border-radius: 15px;
+        text-align: center;
+        width: 300px;
+        box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        backdrop-filter: blur(5px);
+        cursor: pointer;
+        transition: transform 0.3s ease;
+    }
+    .gallery-item:hover {
+        transform: scale(1.05);
+    }
+
+    .gallery-item h2 {
+        color: #FFD700;
+        margin-bottom: 15px;
+    }
+
+    .gallery-item img {
+        width: 100%;
+        border-radius: 10px;
+        border: 2px solid #FFD700;
+        box-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
+        transition: transform 0.3s ease;
+    }
+    .gallery-item img:hover {
+        transform: scale(1.1);
+    }
+
+    /* Modal Styling */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 999;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.9);
+        justify-content: center;
+        align-items: center;
+    }
+    .modal img {
+        max-width: 90%;
+        max-height: 90%;
+        border: 4px solid #FFD700;
+        border-radius: 10px;
+        box-shadow: 0 0 30px rgba(255, 215, 0, 0.7);
+    }
+    .modal.close {
+        cursor: pointer;
+    }
+</style>
+</head>
+<body>
+
+<!-- Solar System Background -->
+<div class="solar-bg">
+    <div class="page-loader__planet-container">
+        <div class="solar-system">
+            <div class="sun"></div>
+            <div class="orbit-path p1" id="path1"><div class="planet planet1"></div></div>
+            <div class="orbit-path p2" id="path2"><div class="planet planet2"></div></div>
+            <div class="orbit-path p3" id="path3"><div class="planet planet3"></div></div>
+            <div class="orbit-path p4" id="path4"><div class="planet planet4"></div></div>
+            <div class="orbit-path p5" id="path5"><div class="planet planet5"></div></div>
+            <div class="orbit-path p6" id="path6"><div class="planet planet6"></div></div>
+            <div class="orbit-path p7" id="path7"><div class="planet planet7"></div></div>
+            <div class="orbit-path p8" id="path8"><div class="planet planet8"></div></div>
+            <div class="orbit-path p9" id="path9"><div class="planet planet9"></div></div>
+        </div>
+        <svg xmlns="http://www.w3.org/2000/svg"><defs>
+            <filter id="goo">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="8" result="blur" />
+                <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7" result="goo" />
+                <feBlend in="SourceGraphic" in2="goo" />
+            </filter>
+        </defs></svg>
+    </div>
+</div>
+
+<!-- Gallery Content -->
+<div class="gallery">
+    <div class="gallery-item" onclick="openModal('images/proposal.jpg')">
+        <h2>Proposal Defense</h2>
+        <img src="images/proposal.jpg" alt="Proposal Defense Photo">
+    </div>
+    <div class="gallery-item" onclick="openModal('images/final.jpg')">
+        <h2>Final Defense</h2>
+        <img src="images/final.jpg" alt="Final Defense Photo">
+    </div>
+</div>
+
+<!-- Modal -->
+<div id="imgModal" class="modal" onclick="closeModal()">
+    <img id="modalImg" src="" alt="Enlarged Photo">
+</div>
+
+<script>
+function openModal(src) {
+    document.getElementById('modalImg').src = src;
+    document.getElementById('imgModal').style.display = 'flex';
+}
+function closeModal() {
+    document.getElementById('imgModal').style.display = 'none';
+}
+
+/* Solar System Animation */
+const planetsConfig = [
+    { el: document.querySelector('.p1'), size: 6,  orbitTime: 4000,  startAngle: 0, currentAngle: 0, startTime: 0 },
+    { el: document.querySelector('.p2'), size: 10, orbitTime: 7000,  startAngle: 40, currentAngle: 0, startTime: 0 },
+    { el: document.querySelector('.p3'), size: 11, orbitTime: 10000, startAngle: 80, currentAngle: 0, startTime: 0 },
+    { el: document.querySelector('.p4'), size: 8,  orbitTime: 15000, startAngle: 120, currentAngle: 0, startTime: 0 },
+    { el: document.querySelector('.p5'), size: 20, orbitTime: 25000, startAngle: 160, currentAngle: 0, startTime: 0 },
+    { el: document.querySelector('.p6'), size: 18, orbitTime: 30000, startAngle: 200, currentAngle: 0, startTime: 0 },
+    { el: document.querySelector('.p7'), size: 14, orbitTime: 40000, startAngle: 240, currentAngle: 0, startTime: 0 },
+    { el: document.querySelector('.p8'), size: 14, orbitTime: 50000, startAngle: 280, currentAngle: 0, startTime: 0 },
+    { el: document.querySelector('.p9'), size: 5,  orbitTime: 60000, startAngle: 320, currentAngle: 0, startTime: 0 },
+];
+
+function easeInOutCubic(t) {
+    return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+}
+
+function initializeAnimation() {
+    const pageLoadTime = Date.now();
+    const staggerDelay = 200;
+    
+    planetsConfig.forEach((p, i) => {
+        p.startTime = pageLoadTime + (i * staggerDelay);
+        const planetEl = p.el.querySelector('.planet');
+        planetEl.style.width = `${p.size}px`;
+        planetEl.style.height = `${p.size}px`;
+    });
+
+    let lastRadius = 30;
+    const padding = 20;
+    planetsConfig.forEach((p, i) => {
+        const prevPlanetSize = i > 0 ? planetsConfig[i-1].size : 0;
+        p.radius = lastRadius + (prevPlanetSize / 2) + (p.size / 2) + padding;
+        lastRadius = p.radius;
+    });
+
+    requestAnimationFrame(masterLoop);
+}
+
+function masterLoop() {
+    const now = Date.now();
+
+    planetsConfig.forEach(p => {
+        const elapsedTime = now - p.startTime;
+        if (elapsedTime < 0) return;
+
+        const splitDuration = 2000;
+        const splitProgress = Math.min(1, elapsedTime / splitDuration);
+        const easedProgress = easeInOutCubic(splitProgress);
+        const currentRadius = easedProgress * p.radius;
+        
+        p.el.style.width = `${currentRadius * 2}px`;
+        p.el.style.height = `${currentRadius * 2}px`;
+        p.el.style.opacity = '1';
+
+        const totalProgress = elapsedTime / p.orbitTime;
+        const currentAngle = p.startAngle + totalProgress * 360;
+        p.el.style.transform = `translate(-50%, -50%) rotate(${currentAngle}deg)`;
+    });
+
+    requestAnimationFrame(masterLoop);
+}
+
+initializeAnimation();
+</script>
+</body>
+</html>
